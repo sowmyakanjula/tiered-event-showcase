@@ -1,0 +1,64 @@
+'use client';
+
+import { useState } from 'react';
+import events, { Tier } from '@/data/events';
+
+const tiers: Tier[] = ['Free', 'Silver', 'Gold', 'Platinum'];
+
+const tierRank: Record<Tier, number> = {
+  Free: 0,
+  Silver: 1,
+  Gold: 2,
+  Platinum: 3,
+};
+
+export default function EventShowcase() {
+  const [tier, setTier] = useState<Tier>('Free');
+
+  const filtered = events.filter(
+    (event) => tierRank[event.tier] <= tierRank[tier]
+  );
+
+  return (
+    <div className="p-4 max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4 text-center">Events</h1>
+      <div className="mb-6 text-center">
+        <label htmlFor="tier" className="mr-2 font-medium">
+          Select your tier:
+        </label>
+        <select
+          id="tier"
+          value={tier}
+          onChange={(e) => setTier(e.target.value as Tier)}
+          className="border rounded px-2 py-1 bg-background text-foreground"
+        >
+          {tiers.map((t) => (
+            <option key={t} value={t}>
+              {t}
+            </option>
+          ))}
+        </select>
+      </div>
+      <ul className="grid gap-4">
+        {filtered.length ? (
+          filtered.map((event) => (
+            <li
+              key={event.id}
+              className="p-4 border rounded shadow-sm bg-background"
+            >
+              <h2 className="text-lg font-semibold mb-1">{event.name}</h2>
+              <p className="text-sm mb-2 text-gray-600 dark:text-gray-400">
+                {event.description}
+              </p>
+              <span className="text-xs px-2 py-1 rounded bg-gray-200 dark:bg-gray-700">
+                {event.tier} tier
+              </span>
+            </li>
+          ))
+        ) : (
+          <li>No events available for your tier.</li>
+        )}
+      </ul>
+    </div>
+  );
+}
