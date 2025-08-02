@@ -2,6 +2,7 @@
 
 import { useUser } from "@clerk/nextjs";
 import events, { Tier } from "@/data/events";
+import Spinner from "@/components/Spinner";
 
 const tierRank: Record<Tier, number> = {
   Free: 0,
@@ -14,7 +15,7 @@ export default function EventShowcase() {
   const { user, isLoaded, isSignedIn } = useUser();
 
   if (!isLoaded) {
-    return <div className="p-4 max-w-2xl mx-auto">Loading events...</div>;
+    return <Spinner />;
   }
 
   const tier: Tier =
