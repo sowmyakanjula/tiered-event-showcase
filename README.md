@@ -27,6 +27,14 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Database Seeding
+
+Sample event data is available in [`supabase/seed.sql`](supabase/seed.sql). It inserts two example events for each membership tier with titles, descriptions, dates, and image URLs. Run the seed with the [Supabase CLI](https://supabase.com/docs/guides/cli) after linking your project:
+
+```bash
+supabase db seed
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
