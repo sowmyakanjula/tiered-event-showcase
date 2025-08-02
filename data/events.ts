@@ -46,4 +46,29 @@ const events: Event[] = [
   },
 ];
 
+export const tierRank: Record<Tier, number> = {
+  Free: 0,
+  Silver: 1,
+  Gold: 2,
+  Platinum: 3,
+};
+
+export function getEventsForTier(tier: Tier): {
+  events: Event[];
+  error: string | null;
+} {
+  try {
+    if (!(tier in tierRank)) {
+      throw new Error(`Invalid tier: ${tier}`);
+    }
+    const filtered = events.filter(
+      (event) => tierRank[event.tier] <= tierRank[tier]
+    );
+    return { events: filtered, error: null };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    return { events: [], error: message };
+  }
+}
+
 export default events;

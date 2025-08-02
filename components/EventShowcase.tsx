@@ -1,14 +1,7 @@
 'use client';
 
 import { useUser } from "@clerk/nextjs";
-import events, { Tier } from "@/data/events";
-
-const tierRank: Record<Tier, number> = {
-  Free: 0,
-  Silver: 1,
-  Gold: 2,
-  Platinum: 3,
-};
+import { getEventsForTier, Tier } from "@/data/events";
 
 export default function EventShowcase() {
   const { user, isLoaded, isSignedIn } = useUser();
@@ -20,9 +13,15 @@ export default function EventShowcase() {
   const tier: Tier =
     (isSignedIn ? (user?.publicMetadata?.tier as Tier) : undefined) ?? "Free";
 
-  const filtered = events.filter(
-    (event) => tierRank[event.tier] <= tierRank[tier]
-  );
+  const { events: filtered, error } = getEventsForTier(tier);
+
+  if (error) {
+    return (
+      <div className="p-4 max-w-2xl mx-auto">
+        Failed to load events: {error}
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 max-w-2xl mx-auto">
