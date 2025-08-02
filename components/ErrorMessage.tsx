@@ -12,7 +12,7 @@ export default function ErrorMessage({ message = 'Something went wrong.', onRetr
       {onRetry && (
         <button
           onClick={onRetry}
-          className="px-4 py-2 bg-red-500 text-white rounded"
+          className="px-4 py-2 bg-red-500 text-white rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
         >
           Try again
         </button>
