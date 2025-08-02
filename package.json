@@ -7,21 +7,23 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "rm -rf build && tsc data/events.ts test/events.test.ts --module commonjs --target ES2017 --outDir build --esModuleInterop --noEmit false && node build/test/events.test.js"
+    "test": "rm -rf build && tsc data/events.ts test/events.test.ts --module commonjs --target ES2017 --outDir build --esModuleInterop --noEmit false && node build/test/events.test.js",
+    "test:e2e": "cypress run"
   },
   "dependencies": {
     "@clerk/nextjs": "^5",
     "@supabase/supabase-js": "^2.0.0",
     "next": "15.4.5",
-      "react": "19.1.0",
-      "react-dom": "19.1.0"
-    },
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
   "devDependencies": {
     "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "cypress": "^13.6.2"
   }
 }
