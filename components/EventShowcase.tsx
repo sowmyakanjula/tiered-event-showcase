@@ -1,9 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import events, { Tier } from '@/data/events';
-
-const tiers: Tier[] = ['Free', 'Silver', 'Gold', 'Platinum'];
+import { useUser } from "@clerk/nextjs";
+import events, { Tier } from "@/data/events";
 
 const tierRank: Record<Tier, number> = {
   Free: 0,
@@ -13,7 +11,14 @@ const tierRank: Record<Tier, number> = {
 };
 
 export default function EventShowcase() {
-  const [tier, setTier] = useState<Tier>('Free');
+  const { user, isLoaded, isSignedIn } = useUser();
+
+  if (!isLoaded) {
+    return <div className="p-4 max-w-2xl mx-auto">Loading events...</div>;
+  }
+
+  const tier: Tier =
+    (isSignedIn ? (user?.publicMetadata?.tier as Tier) : undefined) ?? "Free";
 
   const filtered = events.filter(
     (event) => tierRank[event.tier] <= tierRank[tier]
@@ -22,23 +27,9 @@ export default function EventShowcase() {
   return (
     <div className="p-4 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold mb-4 text-center">Events</h1>
-      <div className="mb-6 text-center">
-        <label htmlFor="tier" className="mr-2 font-medium">
-          Select your tier:
-        </label>
-        <select
-          id="tier"
-          value={tier}
-          onChange={(e) => setTier(e.target.value as Tier)}
-          className="border rounded px-2 py-1 bg-background text-foreground"
-        >
-          {tiers.map((t) => (
-            <option key={t} value={t}>
-              {t}
-            </option>
-          ))}
-        </select>
-      </div>
+      <p className="mb-6 text-center">
+        Showing events for tier: <span className="font-medium">{tier}</span>
+      </p>
       <ul className="grid gap-4">
         {filtered.length ? (
           filtered.map((event) => (
