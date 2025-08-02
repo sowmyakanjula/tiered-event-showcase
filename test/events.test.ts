@@ -1,12 +1,15 @@
-import assert from 'node:assert';
 import events, { Tier } from '../data/events';
 
-const tiers: Tier[] = ['Free', 'Silver', 'Gold', 'Platinum'];
+describe('events data', () => {
+  const tiers: Tier[] = ['Free', 'Silver', 'Gold', 'Platinum'];
 
-assert.strictEqual(events.length, 6, 'expected six events');
+  it('contains six events', () => {
+    expect(events).toHaveLength(6);
+  });
 
-for (const event of events) {
-  assert.ok(tiers.includes(event.tier), `invalid tier for event ${event.id}`);
-}
-
-console.log('All tests passed');
+  it('only uses valid tiers', () => {
+    for (const event of events) {
+      expect(tiers).toContain(event.tier);
+    }
+  });
+});
