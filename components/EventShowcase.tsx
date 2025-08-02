@@ -1,8 +1,12 @@
 'use client';
 
-import { useUser } from "@clerk/nextjs";
-import events, { Tier } from "@/data/events";
-import Spinner from "@/components/Spinner";
+import { useEffect, useState } from 'react';
+import { useUser } from '@clerk/nextjs';
+import type { Event, Tier } from '@/data/events';
+import { getEventsForTier } from '@/lib/events';
+import EventCard from '@/components/EventCard';
+import EventCardSkeleton from '@/components/EventCardSkeleton';
+import ErrorMessage from '@/components/ErrorMessage';
 
 const tierRank: Record<Tier, number> = {
   Free: 0,
@@ -13,17 +17,36 @@ const tierRank: Record<Tier, number> = {
 
 export default function EventShowcase() {
   const { user, isLoaded, isSignedIn } = useUser();
-
-  if (!isLoaded) {
-    return <Spinner />;
-  }
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const tier: Tier =
-    (isSignedIn ? (user?.publicMetadata?.tier as Tier) : undefined) ?? "Free";
+    (isSignedIn ? (user?.publicMetadata?.tier as Tier) : undefined) ?? 'Free';
 
-  const filtered = events.filter(
-    (event) => tierRank[event.tier] <= tierRank[tier]
-  );
+  const fetchEvents = async () => {
+    setLoading(true);
+    try {
+      const data = await getEventsForTier(tierRank[tier]);
+      setEvents(data);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isLoaded) {
+      fetchEvents();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, tier]);
+
+  if (error) {
+    return <ErrorMessage message={error} onRetry={fetchEvents} />;
+  }
 
   return (
     <div className="p-4 max-w-2xl mx-auto">
@@ -32,21 +55,12 @@ export default function EventShowcase() {
         Showing events for tier: <span className="font-medium">{tier}</span>
       </p>
       <ul className="grid gap-4">
-        {filtered.length ? (
-          filtered.map((event) => (
-            <li
-              key={event.id}
-              className="p-4 border rounded shadow-sm bg-background"
-            >
-              <h2 className="text-lg font-semibold mb-1">{event.name}</h2>
-              <p className="text-sm mb-2 text-gray-600 dark:text-gray-400">
-                {event.description}
-              </p>
-              <span className="text-xs px-2 py-1 rounded bg-gray-200 dark:bg-gray-700">
-                {event.tier} tier
-              </span>
-            </li>
+        {loading ? (
+          Array.from({ length: 3 }).map((_, idx) => (
+            <EventCardSkeleton key={idx} />
           ))
+        ) : events.length ? (
+          events.map((event) => <EventCard key={event.id} event={event} />)
         ) : (
           <li>No events available for your tier.</li>
         )}
@@ -54,3 +68,4 @@ export default function EventShowcase() {
     </div>
   );
 }
+
