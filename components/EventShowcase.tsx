@@ -31,7 +31,7 @@ export default function EventShowcase() {
       <p className="mb-6 text-center">
         Showing events for tier: <span className="font-medium">{tier}</span>
       </p>
-      <ul className="grid gap-4">
+      <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         {filtered.length ? (
           filtered.map((event) => (
             <li
