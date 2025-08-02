@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "rm -rf build && tsc data/events.ts test/events.test.ts --module commonjs --target ES2017 --outDir build --esModuleInterop --noEmit false && node build/test/events.test.js"
   },
   "dependencies": {
     "@clerk/nextjs": "^5",
