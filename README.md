@@ -1,43 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tiered Event Showcase
 
-## Architecture Overview
+Next.js 14 demo that showcases how event access changes based on a user's
+subscription tier. Authentication is handled by Clerk and event data lives in
+Supabase.
 
-- **Next.js 14 (App Router)** – server-side rendering for authenticated routes and optional API routes for secure backend calls.
-- **Clerk.dev** – client-side React hooks provide authentication with middleware safeguarding protected pages.
-- **Supabase (PostgreSQL)** – events are stored in the `public` schema and secured with Row-Level Security (RLS) policies.
-- **Tailwind CSS** – utility-first styling with built-in dark and light mode support.
+## Live Demo
 
-## Getting Started
+[https://tiered-event-showcase.vercel.app](https://tiered-event-showcase.vercel.app)
 
-First, run the development server:
+## Setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Install dependencies**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+   ```bash
+   npm install
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. **Environment variables** – create a `.env.local` file with the following
+   entries:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   | Variable                          | Description                                |
+   | --------------------------------- | ------------------------------------------ |
+   | `NEXT_PUBLIC_SUPABASE_URL`        | URL of your Supabase project               |
+   | `NEXT_PUBLIC_SUPABASE_ANON_KEY`   | Supabase anonymous key                     |
+   | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk publishable key for the frontend   |
+   | `CLERK_SECRET_KEY`                | Clerk secret key used on the server        |
 
-## Learn More
+3. **Supabase database** – with the
+   [Supabase CLI](https://supabase.com/docs/guides/cli), run:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   supabase start
+   supabase db reset
+   supabase db seed --file supabase/seed.sql
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. **Start the app**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   npm run dev
+   ```
 
-## Deploy on Vercel
+## Demo Credentials
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Use the following accounts to preview each tier:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Tier      | Email                 | Password |
+| --------- | --------------------- | -------- |
+| Free      | `free@example.com`    | `password` |
+| Silver    | `silver@example.com`  | `password` |
+| Gold      | `gold@example.com`    | `password` |
+| Platinum  | `platinum@example.com`| `password` |
+
+## Seeding
+
+Sample events are defined in `supabase/seed.sql`. Run the seed command above to
+populate your local database.
+
+## Scripts
+
+- `npm test` – run unit tests
+- `npm run lint` – lint the codebase
+
