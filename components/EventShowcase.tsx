@@ -35,14 +35,14 @@ export default function EventShowcase() {
       <p className="mb-6 text-center">
         Showing events for tier: <span className="font-medium">{tierLabel}</span>
       </p>
-      <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-6 p-4 sm:grid-cols-2 md:grid-cols-3">
         {filtered.length ? (
           filtered.map((event) => {
             const label = event.tier.charAt(0).toUpperCase() + event.tier.slice(1);
             return (
               <li
                 key={event.id}
-                className="p-4 border rounded shadow-sm bg-background"
+                className="p-4 rounded-2xl shadow-md overflow-hidden bg-background"
               >
                 <h2 className="text-lg font-semibold mb-1">{event.title}</h2>
                 <p className="text-sm mb-2 text-gray-600 dark:text-gray-400">
