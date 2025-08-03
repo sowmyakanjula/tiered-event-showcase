@@ -41,7 +41,7 @@ export default function EventsPage() {
     }
     fetchEvents();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded, isSignedIn]);
+  }, [isLoaded, isSignedIn, user?.publicMetadata?.tier]);
 
   if (!isLoaded || !isSignedIn) {
     return <Spinner />;

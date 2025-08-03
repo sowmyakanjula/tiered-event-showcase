@@ -19,6 +19,9 @@ export default function Navbar() {
             <Link href="/events" className="hover:underline">
               Events
             </Link>
+            <Link href="/upgrade" className="hover:underline">
+              Upgrade
+            </Link>
             <UserButton appearance={{ elements: { avatarBox: 'h-8 w-8' } }} />
             <SignOutButton>
               <button className="px-3 py-1 text-sm rounded bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">
