@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useUser, UserButton, SignOutButton } from '@clerk/nextjs';
+import { useUser, UserButton, SignOutButton } from '@/lib/clerk';
 
 export default function Navbar() {
   const { isSignedIn } = useUser();

@@ -1,6 +1,6 @@
 'use client';
 
-import { useUser } from "@clerk/nextjs";
+import { useUser } from "@/lib/clerk";
 import events, { Tier } from "@/data/events";
 import Spinner from "@/components/Spinner";
 import TierBadge from "./TierBadge";

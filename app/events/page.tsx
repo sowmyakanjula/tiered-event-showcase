@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth, useUser } from '@clerk/nextjs';
+import { useAuth, useUser, clerkEnabled } from '@/lib/clerk';
 import { useRouter } from 'next/navigation';
 import Spinner from '@/components/Spinner';
 import ErrorMessage from '@/components/ErrorMessage';
@@ -34,6 +34,10 @@ export default function EventsPage() {
   };
 
   useEffect(() => {
+    if (!clerkEnabled) {
+      fetchEvents();
+      return;
+    }
     if (!isLoaded) return;
     if (!isSignedIn) {
       router.push('/sign-in?redirect_url=/events');
@@ -43,7 +47,7 @@ export default function EventsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, isSignedIn]);
 
-  if (!isLoaded || !isSignedIn) {
+  if (clerkEnabled && (!isLoaded || !isSignedIn)) {
     return <Spinner />;
   }
 

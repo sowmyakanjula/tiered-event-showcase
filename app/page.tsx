@@ -1,4 +1,4 @@
-import { auth } from '@clerk/nextjs/server';
+import { auth } from '@/lib/clerkServer';
 import { redirect } from 'next/navigation';
 
 export default function Home() {
