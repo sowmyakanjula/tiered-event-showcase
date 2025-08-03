@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Spinner from '@/components/Spinner';
 import ErrorMessage from '@/components/ErrorMessage';
 import EventCard from '@/components/EventCard';
+import EventCardSkeleton from '@/components/EventCardSkeleton';
 import { Event, Tier } from '@/data/events';
 import { getEventsForTier } from '@/lib/events';
 
@@ -48,7 +49,16 @@ export default function EventsPage() {
   }
 
   if (loading) {
-    return <Spinner />;
+    return (
+      <div className="p-4 max-w-4xl mx-auto">
+        <h1 className="text-2xl font-bold mb-4 text-center">Events</h1>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <EventCardSkeleton key={i} />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (error) {
