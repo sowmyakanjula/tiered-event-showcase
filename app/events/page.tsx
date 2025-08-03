@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Spinner from '@/components/Spinner';
 import ErrorMessage from '@/components/ErrorMessage';
 import EventCard from '@/components/EventCard';
-import { Event } from '@/data/events';
+import { Event, Tier } from '@/data/events';
 import { getEventsForTier } from '@/lib/events';
 
 export default function EventsPage() {
@@ -23,8 +23,9 @@ export default function EventsPage() {
       setError(null);
       setLoading(true);
       const tierName = ((user?.publicMetadata?.tier as string) || 'free').toLowerCase();
-      const data = await getEventsForTier(tierName);
-      setEvents(data);
+      const { data, error } = await getEventsForTier(tierName as Tier);
+      if (error) throw error;
+      setEvents(data || []);
     } catch (err) {
       setError((err as Error).message);
     } finally {

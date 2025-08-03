@@ -1,25 +1,11 @@
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+import { supabase } from './supabaseClient';
+import { Tier } from '@/data/events';
 
-export async function getEventsForTier(userTier: string) {
-  if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error('Missing Supabase configuration');
-  }
-
-  const queryUrl = `${supabaseUrl}/rest/v1/events?select=*&tier=lte.${userTier}&order=event_date.asc`;
-
-  const res = await fetch(queryUrl, {
-    headers: {
-      apikey: supabaseAnonKey,
-      Authorization: `Bearer ${supabaseAnonKey}`,
-    },
-  });
-
-  if (!res.ok) {
-    const message = await res.text();
-    throw new Error(`Supabase error: ${res.status} ${message}`);
-  }
-
-  return res.json();
+export async function getEventsForTier(userTier: Tier) {
+  const { data, error } = await supabase
+    .from('events')
+    .select('*')
+    .lte('tier', userTier)
+    .order('event_date', { ascending: true });
+  return { data, error };
 }
-
