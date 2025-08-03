@@ -5,15 +5,9 @@ import { useAuth, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import Spinner from '@/components/Spinner';
 import ErrorMessage from '@/components/ErrorMessage';
-import EventCard, { Event } from '@/components/EventCard';
+import EventCard from '@/components/EventCard';
+import { Event } from '@/data/events';
 import { getEventsForTier } from '@/lib/events';
-
-const tierMap: Record<string, number> = {
-  Free: 0,
-  Silver: 1,
-  Gold: 2,
-  Platinum: 3,
-};
 
 export default function EventsPage() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -28,9 +22,8 @@ export default function EventsPage() {
     try {
       setError(null);
       setLoading(true);
-      const tierName = (user?.publicMetadata?.tier as string) || 'Free';
-      const tierValue = tierMap[tierName] ?? 0;
-      const data = await getEventsForTier(tierValue);
+      const tierName = ((user?.publicMetadata?.tier as string) || 'free').toLowerCase();
+      const data = await getEventsForTier(tierName);
       setEvents(data);
     } catch (err) {
       setError((err as Error).message);

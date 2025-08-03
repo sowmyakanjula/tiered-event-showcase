@@ -12,8 +12,9 @@ create type tier_enum as enum (
 -- Events table storing tiered events
 create table events (
   id uuid primary key default uuid_generate_v4(),
-  name text not null,
-  description text not null,
-  tier tier_enum not null,
-  created_at timestamptz not null default now()
+  title text not null,
+  description text,
+  event_date timestamp not null,
+  image_url text,
+  tier tier_enum not null
 );

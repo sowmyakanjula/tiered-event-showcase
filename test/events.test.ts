@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import events, { Tier } from '../data/events';
 
-const tiers: Tier[] = ['Free', 'Silver', 'Gold', 'Platinum'];
+const tiers: Tier[] = ['free', 'silver', 'gold', 'platinum'];
 
 assert.strictEqual(events.length, 6, 'expected six events');
 
