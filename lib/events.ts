@@ -1,11 +1,10 @@
 import { supabase } from './supabaseClient';
-import { Tier } from '@/data/events';
 
-export async function getEventsForTier(userTier: Tier) {
+export async function getAllEvents() {
   const { data, error } = await supabase
     .from('events')
     .select('*')
-    .lte('tier', userTier)
     .order('event_date', { ascending: true });
   return { data, error };
 }
+

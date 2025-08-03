@@ -7,7 +7,7 @@ import Spinner from '@/components/Spinner';
 import ErrorMessage from '@/components/ErrorMessage';
 import EventCard from '@/components/EventCard';
 import { Event, Tier } from '@/data/events';
-import { getEventsForTier } from '@/lib/events';
+import { getAllEvents } from '@/lib/events';
 
 export default function EventsPage() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -22,8 +22,7 @@ export default function EventsPage() {
     try {
       setError(null);
       setLoading(true);
-      const tierName = ((user?.publicMetadata?.tier as string) || 'free').toLowerCase();
-      const { data, error } = await getEventsForTier(tierName as Tier);
+      const { data, error } = await getAllEvents();
       if (error) throw error;
       setEvents(data || []);
     } catch (err) {
@@ -59,12 +58,14 @@ export default function EventsPage() {
     return <p className="p-4 text-center">No events available for your tier.</p>;
   }
 
+  const userTier = ((user?.publicMetadata?.tier as string) || 'free').toLowerCase() as Tier;
+
   return (
     <div className="p-4 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-4 text-center">Events</h1>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         {events.map((event) => (
-          <EventCard key={event.id} event={event} />
+          <EventCard key={event.id} event={event} userTier={userTier} />
         ))}
       </div>
     </div>
