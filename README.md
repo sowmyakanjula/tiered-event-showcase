@@ -14,6 +14,22 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - **Tailwind CSS**
   - Utility-first styling, dark/light mode support
 
+## Deployment & Environment
+
+### Environment Variables
+
+Create a `.env.local` file based on the included `.env.example` and provide values for the following keys:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `CLERK_PUBLISHABLE_KEY`
+- `CLERK_SECRET_KEY`
+
+### Vercel Settings
+
+- Add the environment variables above in your Vercel project dashboard.
+- Enable Preview Branches so pull requests receive their own preview deployments.
+
 ## Getting Started
 
 First, run the development server:
