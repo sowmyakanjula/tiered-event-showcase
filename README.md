@@ -2,10 +2,17 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Architecture Overview
 
-- **Next.js 14 (App Router)** – server-side rendering for authenticated routes and optional API routes for secure backend calls.
-- **Clerk.dev** – client-side React hooks provide authentication with middleware safeguarding protected pages.
-- **Supabase (PostgreSQL)** – events are stored in the `public` schema and secured with Row-Level Security (RLS) policies.
-- **Tailwind CSS** – utility-first styling with built-in dark and light mode support.
+- **Next.js 14 (App Router)**
+  - Server-side rendering (SSR) for authenticated routes
+  - API routes for secure backend calls (if needed)
+- **Clerk.dev**
+  - Client-side React Hooks for auth
+  - Middleware to protect pages
+- **Supabase (PostgreSQL)**
+  - Public schema for events table
+  - Row-Level Security (RLS) policies via Supabase policies
+- **Tailwind CSS**
+  - Utility-first styling, dark/light mode support
 
 ## Getting Started
 
