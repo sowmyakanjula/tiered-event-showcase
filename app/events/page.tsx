@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth, useUser } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
+import { useAuth } from '@clerk/nextjs';
 import Spinner from '@/components/Spinner';
 import ErrorMessage from '@/components/ErrorMessage';
 import EventCard from '@/components/EventCard';
@@ -10,9 +9,7 @@ import { Event, Tier } from '@/data/events';
 import { getEventsForTier } from '@/lib/events';
 
 export default function EventsPage() {
-  const { isLoaded, isSignedIn } = useAuth();
-  const { user } = useUser();
-  const router = useRouter();
+  const { isLoaded, sessionClaims } = useAuth();
 
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +19,7 @@ export default function EventsPage() {
     try {
       setError(null);
       setLoading(true);
-      const tierName = ((user?.publicMetadata?.tier as string) || 'free').toLowerCase();
+      const tierName = ((sessionClaims?.publicMetadata?.tier as string) || 'free').toLowerCase();
       const { data, error } = await getEventsForTier(tierName as Tier);
       if (error) throw error;
       setEvents(data || []);
@@ -35,19 +32,11 @@ export default function EventsPage() {
 
   useEffect(() => {
     if (!isLoaded) return;
-    if (!isSignedIn) {
-      router.push('/sign-in?redirect_url=/events');
-      return;
-    }
     fetchEvents();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded, isSignedIn]);
+  }, [isLoaded]);
 
-  if (!isLoaded || !isSignedIn) {
-    return <Spinner />;
-  }
-
-  if (loading) {
+  if (!isLoaded || loading) {
     return <Spinner />;
   }
 
