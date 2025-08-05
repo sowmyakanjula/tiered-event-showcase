@@ -7,10 +7,12 @@ const tierOrder: Tier[] = ['free', 'silver', 'gold', 'platinum'];
 // fall back to the local mock data defined in `data/events.ts` so the app can
 // still function during development or tests.
 export async function getEventsForTier(userTier: Tier) {
+  const allowedIndex = tierOrder.indexOf(userTier);
+  const allowedTiers = tierOrder.slice(0, allowedIndex + 1);
+
   if (!supabase) {
-    const allowedIndex = tierOrder.indexOf(userTier);
     const data: Event[] = events
-      .filter((event) => tierOrder.indexOf(event.tier) <= allowedIndex)
+      .filter((event) => allowedTiers.includes(event.tier))
       .sort(
         (a, b) =>
           new Date(a.event_date).getTime() - new Date(b.event_date).getTime(),
@@ -21,7 +23,7 @@ export async function getEventsForTier(userTier: Tier) {
   const { data, error } = await supabase
     .from('events')
     .select('*')
-    .lte('tier', userTier)
+    .in('tier', allowedTiers)
     .order('event_date', { ascending: true });
   return { data, error };
 }
